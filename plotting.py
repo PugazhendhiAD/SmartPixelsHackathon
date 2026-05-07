@@ -157,18 +157,39 @@ def plot_confusion(cm_by_model: Dict[str, np.ndarray], outpath: Path):
 
 
 def plot_roc(rocs: Dict[str, Tuple[np.ndarray, np.ndarray, float]], outpath: Path):
+
     fig, ax = plt.subplots(1, 1, figsize=(5.8, 4.4), constrained_layout=True)
+
     for name, (fpr, tpr, auc) in rocs.items():
-        ax.plot(fpr, tpr, label=f"{name} (AUC={auc:.4f})")
+
+        run_name, config_name = name.split()
+
+        linestyle = LINESTYLES.get(run_name)
+        color = COLORS.get(config_name)
+
+        ax.plot(
+            fpr,
+            tpr,
+            label=f"training on {run_name}, evaluating on {config_name} (AUC={auc:.4f})",
+            linestyle=linestyle,
+            color=color,
+        )
+
     ax.plot([0, 1], [0, 1], linestyle="--", linewidth=1.0)
+
     ax.set_xlabel("FPR")
     ax.set_ylabel("TPR")
     ax.set_title("High-$p_T$ ROC")
+
     ax.set_xlim(0.0, 1.0)
     ax.set_ylim(0.0, 1.0)
+
     ax.grid(True, alpha=0.35)
+
     ax.legend(loc="lower right", fontsize=8, framealpha=0.2)
+
     plt.show()
+
     # savefig(fig, outpath)
 
 
