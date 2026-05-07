@@ -18,7 +18,7 @@ def plot_data_distributions(data_loader):
 
     n_max = 100
     X, Y = [], []
-    for i, (x, y) in enumerate(tqdm(data_loader)):
+    for i, (x, y) in enumerate(tqdm(data_loader, total=n_max)):
         if i >= n_max:
             break
         X.append(x)
